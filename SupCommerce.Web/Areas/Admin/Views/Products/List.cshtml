@@ -1,0 +1,26 @@
+﻿@model List<SupCommerce.Core.Domain.Product>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var product in Model)
+    {
+        <tr>
+            <td>@product.Name</td>
+            <td>@product?.Category?.Name</td>
+            <td>@product.Price</td>
+        </tr>
+    }
+    </tbody>
+</table>
+

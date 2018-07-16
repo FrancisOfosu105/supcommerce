@@ -1,0 +1,25 @@
+﻿@model IEnumerable<SupCommerce.Core.Domain.Category>
+@{
+    ViewBag.Title = "title";
+}
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Parent Category</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var category in Model)
+    {
+        <tr>
+            <td>
+                <a asp-action="Edit" asp-route-id="@category.Id">
+                    @category.Name
+                </a>
+            </td>
+            <td>@category?.ParentCategory?.Name</td>
+        </tr>
+    }
+    </tbody>
+</table>
