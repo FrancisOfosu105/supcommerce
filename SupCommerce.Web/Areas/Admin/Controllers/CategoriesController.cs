@@ -20,7 +20,9 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> List()
         {
-            var categories = await _dbContext.Set<Category>().ToListAsync();
+            var categories = await _dbContext.Set<Category>()
+                .Include(c=>c.ParentCategory)
+                .ToListAsync();
             return View(categories);
         }
 
@@ -29,10 +31,11 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
         {
             var viewModel = new CategoryFormViewModel
             {
-                Categories = await _dbContext.Set<Category>().Where(c => c.ParentCategory == null).ToListAsync()
+                AllParentCategories =
+                    await _dbContext.Set<Category>().Where(c => c.ParentCategory == null).ToListAsync()
             };
 
-            return View("Form",viewModel);
+            return View("Form", viewModel);
         }
 
         [HttpGet]
@@ -42,16 +45,18 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
 
             if (category == null)
                 return NotFound();
-            
-            
+
+
             var viewModel = new CategoryFormViewModel
             {
-                Categories = await _dbContext.Set<Category>().Where(c => c.ParentCategory == null).ToListAsync(),
+                AllParentCategories =
+                    await _dbContext.Set<Category>().Where(c => c.ParentCategory == null).ToListAsync(),
                 ParentCategoryId = category.ParentCategoryId,
-                Name = category.Name
+                Name = category.Name,
+                Id = category.Id
             };
 
-            return View("Form",viewModel);
+            return View("Form", viewModel);
         }
 
         [HttpPost]
@@ -60,20 +65,53 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.Categories = await _dbContext.Set<Category>().Where(c => c.ParentCategory == null).ToListAsync();
+                model.AllParentCategories =
+                    await _dbContext.Set<Category>().Where(c => c.ParentCategory == null).ToListAsync();
                 return View("Form", model);
             }
 
-            var category = new Category
-            {
-                Name = model.Name,
-                ParentCategoryId = model.ParentCategoryId
-            };
+            Category category;
 
-            await _dbContext.Set<Category>().AddAsync(category);
+            if (model.Id.HasValue)
+            {
+                category = await _dbContext.Set<Category>().FindAsync(model.Id);
+
+                if (category == null)
+                    return NotFound();
+
+                category.Name = model.Name;
+                category.ParentCategoryId = model.ParentCategoryId;
+            }
+            else
+            {
+                category = new Category
+                {
+                    Name = model.Name,
+                    ParentCategoryId = model.ParentCategoryId
+                };
+
+                await _dbContext.Set<Category>().AddAsync(category);
+            }
+
             await _dbContext.SaveChangesAsync();
 
             return RedirectToAction(nameof(List));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var category = await _dbContext.Set<Category>().FindAsync(id);
+
+            if (category == null)
+                return NotFound();
+
+            _dbContext.Set<Category>().Remove(category);
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(List));
+
         }
     }
 }

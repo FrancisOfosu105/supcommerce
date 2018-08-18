@@ -9,4 +9,10 @@
   <ItemGroup>
     <ProjectReference Include="..\SupCommerce.Data\SupCommerce.Data.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\validators.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\vue.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\vuelidate.min.js" />
+  </ItemGroup>
 </Project>

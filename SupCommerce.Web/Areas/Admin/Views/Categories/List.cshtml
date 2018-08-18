@@ -6,7 +6,7 @@
     <thead>
     <tr>
         <th>Name</th>
-        <th>Parent Category</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -15,10 +15,22 @@
         <tr>
             <td>
                 <a asp-action="Edit" asp-route-id="@category.Id">
-                    @category.Name
+                    @if (category.ParentCategoryId == null)
+                    {
+                        @: @category.Name
+                    }
+                    else
+                    {
+                       @: @category.ParentCategory.Name >> @category.Name
+                    }
                 </a>
             </td>
-            <td>@category?.ParentCategory?.Name</td>
+            <td>
+                <a class="btn btn-sm btn-info" asp-action="Edit" asp-route-id="@category.Id">Edit</a>
+                <form asp-action="Delete" method="post" asp-route-id="@category.Id">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
         </tr>
     }
     </tbody>

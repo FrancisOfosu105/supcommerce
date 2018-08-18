@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>@ViewData["Title"] - Admin</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="~/styles/bootstrap.css"/>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
@@ -40,8 +40,10 @@
 <div class="container" id="app">
     @RenderBody()
 </div>
-<script src="~/scripts/admin/manifest.bundle.js"></script>
-<script src="~/scripts/admin/app.bundle.js"></script>
+
+<script src="~/scripts/admin/manifest.bundle.js" asp-append-version="true"></script>
+<script src="~/scripts/admin/vendor.bundle.js" asp-append-version="true"></script>
+<script src="~/scripts/admin/app.bundle.js" asp-append-version="true"></script>
 
 @await RenderSectionAsync("scripts", false)
 </body>
