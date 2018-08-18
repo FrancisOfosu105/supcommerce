@@ -2,9 +2,7 @@ const path = require("path");
 const webpack = require('webpack');
 const config = {
     entry: {
-        'admin-category': "./assets/scripts/admin/pages/category.js",
-        'admin-product': "./assets/scripts/admin/pages/product.js",
-        vender: './assets/scripts/vendor.js'
+        app: './assets/scripts/admin/app.js'
     },
     mode: "development",
     stats: {
@@ -12,16 +10,9 @@ const config = {
         reasons: true
     },
     output: {
-        path: path.resolve(__dirname, "./wwwroot/scripts"),
-        filename: "[name].js",
-        publicPath: "/scripts/"
-    },
-
-    resolve: {
-        extensions: [".ts", ".js"],
-        alias: {
-            vue: 'vue/dist/vue.js'
-        }
+        path: path.resolve(__dirname, "./wwwroot/scripts/admin"),
+        filename: "[name].bundle.js",
+        publicPath: "/scripts/admin/"
     },
     module: {
         rules: [
@@ -31,6 +22,21 @@ const config = {
                 loaders: ["babel-loader"]
             }
         ]
+    },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                commons: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: "vendor",
+                    chunks: "initial",
+                },
+            },
+        },
+        runtimeChunk: {
+            name: "manifest",
+        },
+
     },
     plugins: [
         new webpack.ProvidePlugin({
