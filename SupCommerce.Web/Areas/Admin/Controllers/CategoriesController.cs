@@ -2,8 +2,11 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupCommerce.Core;
 using SupCommerce.Core.Domain;
+using SupCommerce.Core.Repositories;
 using SupCommerce.Data.Data;
+using SupCommerce.Services.Catalog;
 using SupCommerce.Web.Areas.Admin.ViewModels;
 
 namespace SupCommerce.Web.Areas.Admin.Controllers
@@ -11,18 +14,20 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class CategoriesController : Controller
     {
-        private readonly SupCommerceDbContext _dbContext;
+        private readonly ICategoryService _categoryService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoriesController(SupCommerceDbContext dbContext)
+        public CategoriesController(ICategoryService categoryService, IUnitOfWork
+            unitOfWork)
         {
-            _dbContext = dbContext;
+            _categoryService = categoryService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IActionResult> List()
         {
-            var categories = await _dbContext.Set<Category>()
-                .Include(c=>c.ParentCategory)
-                .ToListAsync();
+            var categories = await _categoryService.GetAllCategoriesAsync();
+
             return View(categories);
         }
 
@@ -31,8 +36,8 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
         {
             var viewModel = new CategoryFormViewModel
             {
-                AllParentCategories =
-                    await _dbContext.Set<Category>().Where(c => c.ParentCategory == null).ToListAsync()
+                ParentCategories =
+                    await _categoryService.GetParentCategoriesAsync()
             };
 
             return View("Form", viewModel);
@@ -41,7 +46,7 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var category = await _dbContext.Set<Category>().FindAsync(id);
+            var category = await _categoryService.GetCategoryAsync(id);
 
             if (category == null)
                 return NotFound();
@@ -49,8 +54,8 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
 
             var viewModel = new CategoryFormViewModel
             {
-                AllParentCategories =
-                    await _dbContext.Set<Category>().Where(c => c.ParentCategory == null).ToListAsync(),
+                ParentCategories =
+                    await _categoryService.GetParentCategoriesAsync(),
                 ParentCategoryId = category.ParentCategoryId,
                 Name = category.Name,
                 Id = category.Id
@@ -65,8 +70,8 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.AllParentCategories =
-                    await _dbContext.Set<Category>().Where(c => c.ParentCategory == null).ToListAsync();
+                model.ParentCategories =
+                    await _categoryService.GetParentCategoriesAsync();
                 return View("Form", model);
             }
 
@@ -74,7 +79,7 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
 
             if (model.Id.HasValue)
             {
-                category = await _dbContext.Set<Category>().FindAsync(model.Id);
+                category = await _categoryService.GetCategoryAsync(model.Id.Value);
 
                 if (category == null)
                     return NotFound();
@@ -90,10 +95,10 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
                     ParentCategoryId = model.ParentCategoryId
                 };
 
-                await _dbContext.Set<Category>().AddAsync(category);
+                await _categoryService.InsertAsync(category);
             }
 
-            await _dbContext.SaveChangesAsync();
+            await _unitOfWork.CompleteAsync();
 
             return RedirectToAction(nameof(List));
         }
@@ -102,16 +107,15 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var category = await _dbContext.Set<Category>().FindAsync(id);
+            var category = await _categoryService.GetCategoryAsync(id);
 
             if (category == null)
                 return NotFound();
 
-            _dbContext.Set<Category>().Remove(category);
-            await _dbContext.SaveChangesAsync();
+            _categoryService.Delete(category);
+            await _unitOfWork.CompleteAsync();
 
             return RedirectToAction(nameof(List));
-
         }
     }
 }

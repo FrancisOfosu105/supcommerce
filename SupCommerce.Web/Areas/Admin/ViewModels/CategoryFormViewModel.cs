@@ -14,16 +14,16 @@ namespace SupCommerce.Web.Areas.Admin.ViewModels
 
         [Display(Name = "Parent Category")] public int? ParentCategoryId { get; set; }
 
-        public IEnumerable<Category> AllParentCategories { get; set; }
+        public IEnumerable<Category> ParentCategories { get; set; }
 
         public List<SelectListItem> PrepareParentCategoriesForDrowndown(int? currentCategoryId)
         {
-            if (AllParentCategories == null || !AllParentCategories.Any())
+            if (ParentCategories == null || !ParentCategories.Any())
                 return new List<SelectListItem>();
 
             var list = new List<SelectListItem>();
 
-            foreach (var parentCategory in AllParentCategories)
+            foreach (var parentCategory in ParentCategories)
             {
                 if (currentCategoryId.HasValue)
                 {

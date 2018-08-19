@@ -5,7 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SupCommerce.Core;
+using SupCommerce.Core.Domain;
+using SupCommerce.Core.Repositories;
+using SupCommerce.Data;
 using SupCommerce.Data.Data;
+using SupCommerce.Data.Repositories;
+using SupCommerce.Services.Catalog;
 
 namespace SupCommerce.Web
 {
@@ -33,6 +39,11 @@ namespace SupCommerce.Web
 
             services.AddDbContext<SupCommerceDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SupCommerceConnStr")));
+
+            services.AddScoped<IRepository<Category>, CategoryRepository>();
+
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

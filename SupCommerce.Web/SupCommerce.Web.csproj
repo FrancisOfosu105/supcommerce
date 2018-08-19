@@ -8,6 +8,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SupCommerce.Data\SupCommerce.Data.csproj" />
+    <ProjectReference Include="..\SupCommerce.Services\SupCommerce.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\lib\jquery.js" />
