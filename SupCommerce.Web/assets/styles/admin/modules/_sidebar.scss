@@ -1,0 +1,135 @@
+.sidebar {
+  background-color: $color-grey-dark-1;
+  min-height: 100vh;
+  flex: 0 0 25rem;
+  transition: all .2s;
+  &__heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: $font-display;
+    background-color: #fff;
+    font-size: 2.5rem;
+    height: 5rem;
+    border-right: 1px solid $color-grey-light-3;
+    border-bottom: 1px solid $color-grey-light-3;
+  }
+  &__nav {
+    display: grid;
+    grid-row-gap: 1rem;
+  }
+
+  &__link {
+
+    &--active{
+      background-color: rgba(#fff, .1);
+      position: relative;
+      &::before {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 100%;
+        background-color: $color-primary;
+
+      }
+    }
+
+    display: grid;
+    grid-template-columns: min-content 1fr min-content;
+    align-items: center;
+    grid-column-gap: 1.5rem;
+    padding: 1.5rem;
+
+    &:link, &:visited {
+      color: #fff;
+      font-size: 1.4rem;
+    }
+    &:hover,
+    &:active {
+      color: #fff;
+      text-decoration: none;
+
+      background-color: rgba(#fff, .1);
+      position: relative;
+      &::before {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 100%;
+        background-color: $color-primary;
+
+      }
+    }
+
+    &[data-toggle="collapse"]::after {
+      display: none;
+    }
+  }
+  &__icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    fill: #fff;
+  }
+  &__expand {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: #fff;
+  }
+
+  &__tree {
+    background-color: rgba(#fff, .03);
+
+    &-link {
+
+      &--active {
+        color: #fff !important;
+      }
+
+      display: grid;
+      grid-template-columns: min-content 1fr;
+      align-items: center;
+      grid-column-gap: 1rem;
+      padding: .7rem 0 .7rem 3rem;
+
+      &:link, &:visited {
+        color: $color-grey-light-1;
+        font-size: 1.3rem;
+      }
+
+      &:hover,
+      &:active {
+        color: #fff;
+        text-decoration: none;
+
+      }
+    }
+
+    &-icon {
+      width: 1rem;
+      height: 1rem;
+      fill: currentColor;
+    }
+
+  }
+  &--active {
+    margin-left: -250px;
+
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .sidebar {
+    margin-left: -250px;
+
+    &--active {
+      margin-left: 0;
+
+    }
+  }
+}

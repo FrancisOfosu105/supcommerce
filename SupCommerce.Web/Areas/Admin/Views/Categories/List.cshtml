@@ -1,37 +1,87 @@
 ﻿@model IEnumerable<SupCommerce.Core.Domain.Category>
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "List of categories";
 }
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var category in Model)
-    {
-        <tr>
-            <td>
-                <a asp-action="Edit" asp-route-id="@category.Id">
-                    @if (category.ParentCategoryId == null)
+<div class="clearfix mb-4">
+    <h2 class="heading-2 float-left">
+        List of categories
+    </h2>
+    <a asp-controller="Categories" asp-action="Create" class="btn btn-primary float-right">Add new category</a>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box__header">
+                Search Categories
+            </div>
+            <div class="box__body">
+                <div class="row">
+                    <div class="col-md-6 offset-3">
+                        <form method="get">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Categories</label>
+                                <select type="text" class="form-control">
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="box">
+            <div class="box__body">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var category in Model)
                     {
-                        @: @category.Name
+                        <tr>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@category.Id">
+                                    @if (category.ParentCategoryId == null)
+                                    {
+                                        @: @category.Name
+                                    }
+                                    else
+                                    {
+                                        @: @category.ParentCategory.Name >> @category.Name
+                                    }
+                                </a>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="btn btn-link" asp-action="Edit" asp-route-id="@category.Id">Edit</a>
+                                    <form asp-action="Delete" method="post" asp-route-id="@category.Id">
+                                        <button type="submit" class="btn btn-link">Delete</button>
+                                    </form>
+                                </div>
+
+                            </td>
+                        </tr>
                     }
-                    else
-                    {
-                       @: @category.ParentCategory.Name >> @category.Name
-                    }
-                </a>
-            </td>
-            <td>
-                <a class="btn btn-sm btn-info" asp-action="Edit" asp-route-id="@category.Id">Edit</a>
-                <form asp-action="Delete" method="post" asp-route-id="@category.Id">
-                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                </form>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+.box{
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 2rem 5rem rgba(#000,.05);
+  &__header{
+    border-bottom: 1px solid $color-grey-light-3;
+    padding: 1rem 1.5rem;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    font-family: $font-display;
+    font-weight: 600;
+  }
+  &__body{
+    padding: 1.5rem;
+  }
+}

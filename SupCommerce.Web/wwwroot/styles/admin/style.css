@@ -1,0 +1,175 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; }
+
+html {
+  font-size: 62.5%;
+  box-sizing: border-box; }
+
+body {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #222f3e;
+  background-color: #f4f2f2; }
+
+.wrapper {
+  display: flex; }
+
+.row:not(:last-child) {
+  margin-bottom: 2rem; }
+
+.sidebar {
+  background-color: #222f3e;
+  min-height: 100vh;
+  flex: 0 0 25rem;
+  transition: all .2s; }
+  .sidebar__heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Josefin Sans", sans-serif;
+    background-color: #fff;
+    font-size: 2.5rem;
+    height: 5rem;
+    border-right: 1px solid #dcdcdc;
+    border-bottom: 1px solid #dcdcdc; }
+  .sidebar__nav {
+    display: grid;
+    grid-row-gap: 1rem; }
+  .sidebar__link {
+    display: grid;
+    grid-template-columns: -webkit-min-content 1fr -webkit-min-content;
+    grid-template-columns: min-content 1fr min-content;
+    align-items: center;
+    grid-column-gap: 1.5rem;
+    padding: 1.5rem; }
+    .sidebar__link--active {
+      background-color: rgba(255, 255, 255, 0.1);
+      position: relative; }
+      .sidebar__link--active::before {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 100%;
+        background-color: #5f27cd; }
+    .sidebar__link:link, .sidebar__link:visited {
+      color: #fff;
+      font-size: 1.4rem; }
+    .sidebar__link:hover, .sidebar__link:active {
+      color: #fff;
+      text-decoration: none;
+      background-color: rgba(255, 255, 255, 0.1);
+      position: relative; }
+      .sidebar__link:hover::before, .sidebar__link:active::before {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 100%;
+        background-color: #5f27cd; }
+    .sidebar__link[data-toggle="collapse"]::after {
+      display: none; }
+  .sidebar__icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    fill: #fff; }
+  .sidebar__expand {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: #fff; }
+  .sidebar__tree {
+    background-color: rgba(255, 255, 255, 0.03); }
+    .sidebar__tree-link {
+      display: grid;
+      grid-template-columns: -webkit-min-content 1fr;
+      grid-template-columns: min-content 1fr;
+      align-items: center;
+      grid-column-gap: 1rem;
+      padding: .7rem 0 .7rem 3rem; }
+      .sidebar__tree-link--active {
+        color: #fff !important; }
+      .sidebar__tree-link:link, .sidebar__tree-link:visited {
+        color: #808e9b;
+        font-size: 1.3rem; }
+      .sidebar__tree-link:hover, .sidebar__tree-link:active {
+        color: #fff;
+        text-decoration: none; }
+    .sidebar__tree-icon {
+      width: 1rem;
+      height: 1rem;
+      fill: currentColor; }
+  .sidebar--active {
+    margin-left: -250px; }
+
+@media only screen and (max-width: 768px) {
+  .sidebar {
+    margin-left: -250px; }
+    .sidebar--active {
+      margin-left: 0; } }
+
+.header {
+  background-color: #fff;
+  font-size: 1.5rem;
+  height: 5rem;
+  border-bottom: 1px solid #dcdcdc;
+  display: grid;
+  grid-template-columns: -webkit-min-content 1fr;
+  grid-template-columns: min-content 1fr;
+  align-items: center; }
+  .header__toggler-box {
+    cursor: pointer; }
+  .header__toggler-btn {
+    border: none;
+    border-radius: 0;
+    background-color: #dcdcdc;
+    width: 3rem;
+    height: 2px;
+    margin-left: 1.5rem; }
+    .header__toggler-btn::before, .header__toggler-btn::after {
+      background-color: #dcdcdc;
+      width: 3rem;
+      height: 2px;
+      display: block;
+      content: ""; }
+    .header__toggler-btn::before {
+      -webkit-transform: translateY(-1rem);
+              transform: translateY(-1rem); }
+    .header__toggler-btn::after {
+      -webkit-transform: translateY(0.8rem);
+              transform: translateY(0.8rem); }
+  .header__user {
+    justify-self: end;
+    margin-right: 1.5rem; }
+
+.content {
+  flex: 1; }
+  .content__body {
+    padding: 2rem; }
+
+.box {
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.05); }
+  .box__header {
+    border-bottom: 1px solid #dcdcdc;
+    padding: 1rem 1.5rem;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    font-family: "Josefin Sans", sans-serif;
+    font-weight: 600; }
+  .box__body {
+    padding: 1.5rem; }
+
+.heading-2 {
+  font-family: "Josefin Sans", sans-serif;
+  text-transform: capitalize;
+  font-size: 2rem; }
