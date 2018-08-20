@@ -1,0 +1,31 @@
+.btn {
+  &__input-file {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+
+  &__input-file + label {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background-color: $color-grey-light-3;
+    display: inline-block;
+    padding: .5rem 1rem;
+  }
+
+  &__input-file:focus + label,
+  &__input-file + label:hover {
+    background-color: rgba($color-primary, .5);
+  }
+
+  &__input-file + label {
+    cursor: pointer;
+  }
+
+  &__input-file:focus + label {
+    box-shadow: 0 0.5rem 1rem rgba(#000, 0.2);
+  }
+}

@@ -1,12 +1,12 @@
-﻿using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SupCommerce.Core;
 using SupCommerce.Core.Domain;
-using SupCommerce.Core.Repositories;
-using SupCommerce.Data.Data;
+using SupCommerce.Core.Extentsions;
 using SupCommerce.Services.Catalog;
+using SupCommerce.Services.Picture;
 using SupCommerce.Web.Areas.Admin.ViewModels;
 
 namespace SupCommerce.Web.Areas.Admin.Controllers
@@ -16,19 +16,27 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
     {
         private readonly ICategoryService _categoryService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IPictureService _pictureService;
 
         public CategoriesController(ICategoryService categoryService, IUnitOfWork
-            unitOfWork)
+            unitOfWork, IMapper mapper, IPictureService pictureService)
         {
             _categoryService = categoryService;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _pictureService = pictureService;
         }
 
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List([FromQuery] QueryParams queryParams)
         {
-            var categories = await _categoryService.GetAllCategoriesAsync();
+            var viewModel = new CategoryListViewModel
+            {
+                Categories = await _categoryService.GetPagedCategoriesAsync(queryParams),
+                q = queryParams.q
+            };
 
-            return View(categories);
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -52,14 +60,10 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
                 return NotFound();
 
 
-            var viewModel = new CategoryFormViewModel
-            {
-                ParentCategories =
-                    await _categoryService.GetParentCategoriesAsync(),
-                ParentCategoryId = category.ParentCategoryId,
-                Name = category.Name,
-                Id = category.Id
-            };
+            var viewModel = _mapper.Map<Category, CategoryFormViewModel>(category);
+
+            viewModel.ParentCategories = await _categoryService.GetParentCategoriesAsync();
+
 
             return View("Form", viewModel);
         }
@@ -83,18 +87,59 @@ namespace SupCommerce.Web.Areas.Admin.Controllers
 
                 if (category == null)
                     return NotFound();
+                
+                var categoryExists = await _categoryService.CategoryExistsAsync(model.Name, model.Id);
+                if (categoryExists)
+                {
+                    ModelState.AddModelError(String.Empty, "A category with similar name exists.");
+                    model.ParentCategories =
+                        await _categoryService.GetParentCategoriesAsync();
+                    return View("Form", model);
+                }
 
-                category.Name = model.Name;
-                category.ParentCategoryId = model.ParentCategoryId;
+                _mapper.Map(model, category);
+
+                category.Slug = model.Name.Slugify();
+               
+                if (model.File != null)
+                {
+                    //Remove the old picture if there is any
+
+                    _pictureService.Remove(category.FileName);
+                    
+                    //Upload the picture
+                    var fileName = await _pictureService.UploadAsync(model.File);
+
+                    category.FileName = fileName;
+
+                }
+               
             }
             else
             {
-                category = new Category
+                
+                //validate the category name
+                var categoryExists = await _categoryService.CategoryExistsAsync(model.Name);
+                if (categoryExists)
                 {
-                    Name = model.Name,
-                    ParentCategoryId = model.ParentCategoryId
-                };
+                    ModelState.AddModelError(String.Empty, "A category with similar name exists.");
+                    model.ParentCategories =
+                        await _categoryService.GetParentCategoriesAsync();
+                    return View("Form", model);
+                }
+                
+                category = _mapper.Map<CategoryFormViewModel, Category>(model);
+                category.Slug = model.Name.Slugify();
 
+                if (model.File != null)
+                {
+                    //Upload the picture
+                    var fileName = await _pictureService.UploadAsync(model.File);
+
+                    category.FileName = fileName;
+
+                }
+               
                 await _categoryService.InsertAsync(category);
             }
 

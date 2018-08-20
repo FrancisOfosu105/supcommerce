@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SupCommerce.Data.Data;
 
 namespace SupCommerce.Data.Migrations
 {
     [DbContext(typeof(SupCommerceDbContext))]
-    partial class SupCommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180819180257_ChangePictureUrlToFileName")]
+    partial class ChangePictureUrlToFileName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,10 +39,6 @@ namespace SupCommerce.Data.Migrations
                         .HasMaxLength(256);
 
                     b.Property<int?>("ParentCategoryId");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 

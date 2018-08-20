@@ -13,6 +13,10 @@ namespace SupCommerce.Data.EntityConfigurations
             builder.HasKey(c => c.Id);
 
             builder.Property(c => c.Name).IsRequired().HasMaxLength(256);
+            
+            builder.Property(c => c.FileName).HasMaxLength(256);
+            
+            builder.Property(c => c.Slug).IsRequired().HasMaxLength(256);
 
             builder.HasMany(c => c.SubCategories)
                 .WithOne(c => c.ParentCategory)

@@ -19,6 +19,6 @@ gulp.task("fa", function () {
 
 gulp.task("fonts", function () {
     return gulp.src("./node_modules/@fortawesome/fontawesome-free/webfonts/**")
-        .pipe(gulp.dest("./wwwroot/fonts"));
+        .pipe(gulp.dest("./wwwroot/webfonts"));
 });
 

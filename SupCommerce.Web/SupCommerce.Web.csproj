@@ -4,6 +4,12 @@
     <_RazorBuildServerPipeName>razor-issues-2406</_RazorBuildServerPipeName>
   </PropertyGroup>
   <ItemGroup>
+      <PackageReference Include="AutoMapper">
+          <Version>7.0.1</Version>
+      </PackageReference>
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection">
+          <Version>5.0.1</Version>
+      </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
@@ -16,4 +22,7 @@
     <_ContentIncludedByDefault Remove="wwwroot\lib\vue.js" />
     <_ContentIncludedByDefault Remove="wwwroot\lib\vuelidate.min.js" />
   </ItemGroup>
+    <ItemGroup>
+        <Folder Include="assets\styles\admin\pages"/>
+    </ItemGroup>
 </Project>

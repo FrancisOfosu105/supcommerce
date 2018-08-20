@@ -19,8 +19,17 @@ body {
 .wrapper {
   display: flex; }
 
+.heading-2 {
+  font-family: "Josefin Sans", sans-serif;
+  text-transform: capitalize;
+  font-size: 2rem; }
+
 .row:not(:last-child) {
   margin-bottom: 2rem; }
+
+.form-group label {
+  font-weight: bold;
+  font-size: 1.3rem; }
 
 .sidebar {
   background-color: #222f3e;
@@ -166,10 +175,32 @@ body {
     font-size: 1.4rem;
     font-family: "Josefin Sans", sans-serif;
     font-weight: 600; }
-  .box__body {
+  .box__body, .box__footer {
     padding: 1.5rem; }
+  .box__footer {
+    border-top: 1px solid #dcdcdc; }
 
-.heading-2 {
-  font-family: "Josefin Sans", sans-serif;
-  text-transform: capitalize;
-  font-size: 2rem; }
+.btn__input-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1; }
+
+.btn__input-file + label {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background-color: #dcdcdc;
+  display: inline-block;
+  padding: .5rem 1rem; }
+
+.btn__input-file:focus + label,
+.btn__input-file + label:hover {
+  background-color: rgba(95, 39, 205, 0.5); }
+
+.btn__input-file + label {
+  cursor: pointer; }
+
+.btn__input-file:focus + label {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2); }

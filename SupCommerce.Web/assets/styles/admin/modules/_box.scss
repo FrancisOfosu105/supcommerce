@@ -10,7 +10,12 @@
     font-family: $font-display;
     font-weight: 600;
   }
-  &__body{
+  &__body,
+  &__footer {
     padding: 1.5rem;
+  }
+
+  &__footer {
+    border-top: 1px solid $color-grey-light-3;
   }
 }

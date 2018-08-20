@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using SupCommerce.Core;
 using SupCommerce.Core.Domain;
 
 namespace SupCommerce.Services.Catalog
@@ -10,9 +11,12 @@ namespace SupCommerce.Services.Catalog
 
         void Delete(Category category);
         
-        Task<IEnumerable<Category>> GetAllCategoriesAsync();
+        Task<PagedList<Category>> GetPagedCategoriesAsync(QueryParams queryParams);
+        
         Task<IEnumerable<Category>> GetParentCategoriesAsync();
         
         Task<Category> GetCategoryAsync(int id);
+        
+        Task<bool> CategoryExistsAsync(string name, int? id = null);
     }
 }

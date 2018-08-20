@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using SupCommerce.Data;
 using SupCommerce.Data.Data;
 using SupCommerce.Data.Repositories;
 using SupCommerce.Services.Catalog;
+using SupCommerce.Services.Picture;
 
 namespace SupCommerce.Web
 {
@@ -40,9 +42,13 @@ namespace SupCommerce.Web
             services.AddDbContext<SupCommerceDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SupCommerceConnStr")));
 
+            services.AddAutoMapper();
+
             services.AddScoped<IRepository<Category>, CategoryRepository>();
 
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IPictureService, PictureService>();
+            
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SupCommerce.Core;
 using SupCommerce.Core.Domain;
 using SupCommerce.Core.Repositories;
 
@@ -26,11 +28,24 @@ namespace SupCommerce.Services.Catalog
             _categoryRepository.Remove(category);
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        public async Task<PagedList<Category>> GetPagedCategoriesAsync(QueryParams queryParams)
         {
-            return await _categoryRepository.Table
+            var query = _categoryRepository.Table
                 .Include(c => c.ParentCategory)
-                .ToListAsync();
+                .AsQueryable();
+
+            //Perform Filtering
+            if (!string.IsNullOrWhiteSpace(queryParams.q))
+            {
+                query = query.Where(c => c.Name.Contains(queryParams.q)).AsQueryable();
+            }
+
+            var totalCount = await query.CountAsync();
+
+            query = query.Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize);
+
+            return new PagedList<Category>(await query.ToListAsync(), totalCount, queryParams.Page,
+                queryParams.PageSize);
         }
 
         public async Task<IEnumerable<Category>> GetParentCategoriesAsync()
@@ -43,6 +58,18 @@ namespace SupCommerce.Services.Catalog
         public async Task<Category> GetCategoryAsync(int id)
         {
             return await _categoryRepository.GetByIdAsync(id);
+        }
+
+        public async Task<bool> CategoryExistsAsync(string name, int? id = null)
+        {
+            if (id.HasValue)
+            {
+                return await _categoryRepository.Table.AnyAsync(
+                    c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase) && c.Id != id);
+            }
+
+            return await _categoryRepository.Table.AnyAsync(
+                c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

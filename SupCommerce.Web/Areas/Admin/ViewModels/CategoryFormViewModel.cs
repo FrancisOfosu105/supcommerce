@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SupCommerce.Core.Domain;
 
@@ -11,6 +12,16 @@ namespace SupCommerce.Web.Areas.Admin.ViewModels
         public int? Id { get; set; }
 
         [Required] public string Name { get; set; }
+
+        public string Slug { get; set; }
+
+        public string PictureUrl { get; set; }
+
+        public int DisplayOrder { get; set; } = 1;
+
+        public bool IsPublished { get; set; }
+
+        public IFormFile File { get; set; }
 
         [Display(Name = "Parent Category")] public int? ParentCategoryId { get; set; }
 
